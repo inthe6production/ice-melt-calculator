@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en-CA">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Ice Melt Calculator — How Many Bags Does Your Driveway Need? (Canada)</title>
+<meta name="description" content="Enter your driveway size and product type. Get pounds per storm, bags per season, and the right Canadian ice melt to order today.">
+<style>
+body{font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;max-width:760px;margin:0 auto;padding:20px;line-height:1.5;color:#14202b}
+.card{border:1px solid #d7dee6;border-radius:12px;padding:16px;margin:16px 0}
+label{display:block;font-weight:600;margin:12px 0 4px}
+input,select{width:100%;padding:10px;border:1px solid #b9c4cf;border-radius:8px;font-size:16px}
+button{background:#ff9900;border:0;padding:12px 18px;border-radius:8px;font-weight:700;font-size:16px;cursor:pointer;width:100%}
+.small{font-size:13px;color:#52606d}.result{font-size:20px;font-weight:700}
+a.btn{display:block;text-align:center;background:#232f3e;color:#fff;padding:12px;border-radius:8px;text-decoration:none;margin:8px 0}
+.disclosure{background:#fff8e1;border:1px solid #f0d48a;padding:10px;border-radius:8px;font-size:13px}
+</style>
+</head>
+<body>
+<h1>How much ice melt do you actually need?</h1>
+<p>Most Canadians use 3–4× too much — or run out mid-storm. Enter your area, pick your product, get the real number: <strong>pounds per application, and bags for the season.</strong></p>
+<p class="disclosure">Disclosure: As an Amazon Associate I earn from qualifying purchases. Links below go to Amazon.ca. Prices are shown only on Amazon — tap “Check price on Amazon.”</p>
+
+<div class="card">
+<label>Driveway + walkway area (square feet)</label>
+<input id="area" type="number" value="400" min="50" step="10">
+<p class="small">Tip: a single driveway is ~200 sq ft, a double ~400 sq ft. Length × width if you know it.</p>
+
+<label>Product type</label>
+<select id="type">
+<option value="blend">Premium blend / calcium-chloride blend — deep cold, fast (e.g. Alaskan-type)</option>
+<option value="calcium">Calcium chloride — works to about −29°C</option>
+<option value="magnesium">Magnesium chloride — pet-friendlier, gentler on concrete</option>
+<option value="salt">Rock salt — budget, stops working around −9°C</option>
+<option value="cma">CMA / eco blend — gentlest on concrete, slowest, to about −7°C</option>
+</select>
+
+<label>Applications this season (storms you’ll treat)</label>
+<input id="storms" type="number" value="20" min="1" step="1">
+<p class="small">GTA typical: 15–25 treatments. Snow-belt: 25–40.</p>
+<button onclick="calc()">Calculate bags</button>
+<p class="result" id="out"></p>
+<p id="detail"></p>
+</div>
+
+<h2>Buy exactly that — on Amazon.ca</h2>
+<p class="small">As an Amazon Associate I earn from qualifying purchases. Prices and availability change — the button shows the current price on Amazon.ca.</p>
+<div class="card"><strong>1. Deep-cold / premium pick</strong><br>STARCRUSH Premium High-Performance Ice Melt (10 lb) — rated to −35°C, pet-friendly, concrete-safe. Premium import option; costs more per bag than the everyday picks.<a class="btn" href="https://link.amazon/B0csnxfvX">Check price on Amazon.ca</a></div>
+<div class="card"><strong>2. Pet-friendlier pick</strong><br>FIREKI Ice Melt, Pet Safe (10 lb) — pure magnesium chloride, safer for paws, pets and plants.<a class="btn" href="https://link.amazon/B06KhFYj3">Check price on Amazon.ca</a></div>
+<div class="card"><strong>3. Budget pick</strong><br>Rock salt, 20 kg — Sifto or Windsor bag.<a class="btn" href="https://link.amazon/B0fjDl6yA">Check price on Amazon.ca</a></div>
+<div class="card"><strong>4. Spreader (stop wasting half the bag)</strong><br>Scotts Wizz handheld spreader or equivalent.<a class="btn" href="https://link.amazon/B06YVHsBo">Check price on Amazon.ca</a></div>
+<div class="card"><strong>5. No-salt premium option</strong><br>HeatTrak heated walkway/driveway mat.<a class="btn" href="https://link.amazon/B057wJgJv">Check price on Amazon.ca</a></div>
+
+<h2>How the math works</h2>
+<p>Base rate used: about <strong>½ cup (≈4 oz) per square yard</strong> per application — OxyChem’s published calcium-chloride guidance is 4 oz per sq yd (28 lb per 1,000 sq ft), and Morton’s bag directions use ½ cup per sq yd. Blends/salt need a little more, calcium chloride a little less. Always start light — you can add more; over-applying damages concrete and plants and does not melt faster.</p>
+<p class="small">Sources: OxyChem Calcium Chloride “Melting Ice — Sidewalks” (oxycalciumchloride.com/use-responsibly/melting-ice-sidewalks/); Morton Action Melt directions via directionsforme.org. Effective temperatures are general product-class guidance, not a guarantee for a specific listing — check the bag you buy.</p>
+
+<script>
+// rate = lb per 1,000 sq ft per application, by type (derived from 4 oz/sq yd base, adjusted by class)
+const RATES={calcium:25, blend:28, magnesium:28, cma:30, salt:32};
+const BAG_KG=20, LB_PER_KG=2.20462;
+function calc(){
+  const area=+document.getElementById('area').value||0;
+  const type=document.getElementById('type').value;
+  const storms=+document.getElementById('storms').value||0;
+  const perStorm=area/1000*RATES[type];
+  const season=perStorm*storms;
+  const bagLb=BAG_KG*LB_PER_KG;
+  const bags=Math.ceil(season/bagLb);
+  document.getElementById('out').textContent=
+    `${perStorm.toFixed(1)} lb per storm · ${Math.round(season)} lb this season · ${bags} × 20 kg bag${bags===1?'':'s'}`;
+  document.getElementById('detail').textContent=
+    `That is about ${(perStorm/ (area/9)).toFixed(2)} lb per square yard per application. Buy the season amount now if storage is dry — mid-January stock-outs are common in Canada.`;
+}
+calc();
+</script>
+</body>
+</html>
